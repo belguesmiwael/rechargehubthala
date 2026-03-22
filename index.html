@@ -1467,271 +1467,134 @@
     font-weight: 700; color: var(--text2); font-family: 'Space Mono', monospace;
   }
 
+  @keyframes slideUpBanner { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+
+
   /* ═══════════════════════════════════════════════
-     PC LAYOUT — sidebar à gauche (≥ 900px)
+     PC LAYOUT ≥ 900px — sidebar + full screen
   ═══════════════════════════════════════════════ */
   @media (min-width: 900px) {
+    body { max-width: 100%; margin: 0; }
 
-    /* Remove mobile centering */
-    body {
-      max-width: 100%;
-      margin: 0;
-      overflow-x: hidden;
-    }
+    /* Splash centred */
+    #splash { position:fixed;inset:0;z-index:2000;max-width:100%;margin:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center; }
+    #splash .login-card { max-width:420px;width:100%; }
 
-    /* Splash stays centered */
-    #splash {
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      max-width: 100%;
-      margin: 0;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+    /* App = sidebar + main */
+    #app { display:flex;flex-direction:row;min-height:100vh;max-width:100%; }
 
-    #splash .login-card {
-      max-width: 420px;
-      width: 100%;
-    }
+    /* ── Sidebar ── */
+    #pc-sidebar { display:flex !important;flex-direction:column;width:220px;min-width:220px;height:100vh;position:fixed;left:0;top:0;background:var(--surface);border-right:1px solid var(--border);z-index:200;overflow-y:auto; }
+    .sb-logo { padding:20px 18px 14px;border-bottom:1px solid var(--border); }
+    .sb-logo-title { font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .sb-logo-sub { font-size:0.62rem;color:var(--text3);margin-top:2px; }
+    .sb-admin { padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px; }
+    .sb-dot { width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0; }
+    .sb-admin-name { font-size:0.82rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .sb-admin-role { font-size:0.62rem;color:var(--accent);font-weight:600; }
+    .sb-nav { flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:2px; }
+    .sb-item { display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:10px;cursor:pointer;color:var(--text3);font-size:0.82rem;font-weight:600;transition:all 0.15s;position:relative; }
+    .sb-item:hover { background:var(--surface2);color:var(--text); }
+    .sb-item.active { background:rgba(0,200,150,0.12);color:var(--accent); }
+    .sb-item-icon { font-size:1.05rem;flex-shrink:0; }
+    .sb-badge { background:var(--danger);color:#fff;font-size:0.58rem;font-weight:700;padding:1px 6px;border-radius:10px;min-width:16px;text-align:center; }
+    .sb-footer { padding:10px 8px;border-top:1px solid var(--border); }
+    .sb-logout { display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:10px;cursor:pointer;color:var(--danger);font-size:0.82rem;font-weight:600;transition:background 0.15s; }
+    .sb-logout:hover { background:rgba(239,68,68,0.1); }
 
-    /* App becomes flex row: sidebar + main */
-    #app {
-      display: flex;
-      flex-direction: row;
-      min-height: 100vh;
-      max-width: 100%;
-    }
+    /* ── Main area ── */
+    #main-wrap { margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;width:calc(100vw - 220px); }
+    .top-bar { padding:12px 28px; }
+    .content { padding-bottom:24px;padding-left:0;padding-right:0; }
+    .screen-pad { padding-left:28px;padding-right:28px; }
+    .bottom-nav { display:none !important; }
+    .modal { max-width:580px;border-radius:var(--radius); }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      display: flex !important;
-      flex-direction: column;
-      width: 240px;
-      min-width: 240px;
-      height: 100vh;
-      position: fixed;
-      left: 0; top: 0;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      z-index: 200;
-      overflow-y: auto;
-      padding-bottom: 20px;
-    }
-
-    .sidebar-logo {
-      padding: 24px 20px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .sidebar-logo-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .sidebar-logo-sub {
-      font-size: 0.65rem;
-      color: var(--text3);
-      margin-top: 2px;
-      font-weight: 500;
-    }
-
-    .sidebar-admin {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .sidebar-admin-dot {
-      width: 9px; height: 9px;
-      background: var(--accent);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .sidebar-admin-info { flex: 1; min-width: 0; }
-    .sidebar-admin-name {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .sidebar-admin-role {
-      font-size: 0.62rem;
-      color: var(--accent);
-      font-weight: 600;
-      margin-top: 1px;
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      padding: 12px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.18s;
-      position: relative;
-      color: var(--text3);
-      font-size: 0.84rem;
-      font-weight: 600;
-    }
-    .sidebar-item:hover {
-      background: var(--surface2);
-      color: var(--text);
-    }
-    .sidebar-item.active {
-      background: rgba(0,200,150,0.12);
-      color: var(--accent);
-    }
-    .sidebar-item-icon { font-size: 1.1rem; flex-shrink: 0; }
-    .sidebar-item-label { flex: 1; }
-    .sidebar-badge {
-      background: var(--danger);
-      color: #fff;
-      font-size: 0.58rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 10px;
-      min-width: 18px;
-      text-align: center;
-    }
-
-    .sidebar-footer {
-      padding: 12px 10px;
-      border-top: 1px solid var(--border);
-    }
-    .sidebar-logout {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      color: var(--danger);
-      font-size: 0.82rem;
-      font-weight: 600;
-      transition: background 0.18s;
-    }
-    .sidebar-logout:hover { background: rgba(239,68,68,0.1); }
-
-    /* ── MAIN AREA ── */
-    .main-area {
-      margin-left: 240px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      max-width: calc(100vw - 240px);
-    }
-
-    /* Top bar becomes slimmer on PC */
-    .top-bar {
-      padding: 12px 24px;
-    }
-
-    /* Content has no bottom padding for nav */
-    .content {
-      padding-bottom: 24px;
-      max-width: 1100px;
-      width: 100%;
-      margin: 0 auto;
-      padding-left: 24px;
-      padding-right: 24px;
-      box-sizing: border-box;
-    }
-
-    /* Hide mobile bottom nav on PC */
-    .bottom-nav { display: none !important; }
-
-    /* Modals wider on PC */
-    .modal {
-      max-width: 560px;
-      border-radius: var(--radius);
-    }
-
-    /* Screen padding adjustment */
-    .screen-pad { padding: 0; }
-  }
-
-  @media (min-width: 1200px) {
-    .content { max-width: 1300px; }
+    /* Offline bar adjustments */
+    #offline-bar { left:220px; }
   }
 
 </style>
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22RechargeHub TN%22,%22short_name%22:%22RechargeHub%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%230f1923%22,%22theme_color%22:%22%2300c896%22,%22orientation%22:%22portrait%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230f1923'/%3E%3Ccircle cx='256' cy='210' r='90' fill='none' stroke='%2300c896' stroke-width='28'/%3E%3Ccircle cx='256' cy='210' r='28' fill='%2300c896'/%3E%3C/svg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any maskable%22}]}">
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22RechargeHub TN%22,%22short_name%22:%22RechargeHub%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%230f1923%22,%22theme_color%22:%22%2300c896%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230f1923'/%3E%3Ccircle cx='256' cy='210' r='90' fill='none' stroke='%2300c896' stroke-width='28'/%3E%3Ccircle cx='256' cy='210' r='28' fill='%2300c896'/%3E%3C/svg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any maskable%22}]}">
 </head>
 <body>
+<!-- Offline status bar -->
+<div id="offline-bar" style="position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(90deg,#dc2626,#b91c1c);color:#fff;font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:700;padding:7px 16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;transform:translateY(-100%);opacity:0;transition:transform 0.3s,opacity 0.3s">
+  <span>📵</span><span>Hors ligne — modifications sauvegardées localement</span>
+  <span id="sync-count" style="background:rgba(255,255,255,0.2);padding:1px 8px;border-radius:10px;font-size:0.68rem"></span>
+</div>
+
+
 
 <!-- PWA Install Banner -->
-<div id="pwa-install-banner" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:400px;background:linear-gradient(135deg,#111e2a,#1a2d3d);border:1px solid #00c896;border-radius:16px;padding:14px 16px;z-index:9999;box-shadow:0 8px 32px rgba(0,200,150,0.2);align-items:center;gap:12px">
-  <div style="width:44px;height:44px;background:#0f1923;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem">📲</div>
-  <div style="flex:1">
-    <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.88rem;color:#fff">Installer RechargeHub</div>
-    <div style="font-size:0.7rem;color:#aab;margin-top:2px">Accès rapide depuis votre écran d'accueil</div>
+<div id="pwa-install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:linear-gradient(135deg,#0d1f2d,#0f2a1e);border-top:2px solid #00c896;padding:16px 20px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,200,150,0.25);flex-direction:column;gap:12px;animation:slideUpBanner 0.4s cubic-bezier(0.4,0,0.2,1)">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="width:48px;height:48px;background:linear-gradient(135deg,#00c896,#0066cc);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.5rem">📲</div>
+    <div style="flex:1">
+      <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.92rem;color:#fff">Installer RechargeHub TN</div>
+      <div style="font-size:0.7rem;color:#8ab;margin-top:2px">Disponible hors connexion · Accès rapide</div>
+    </div>
+    <button onclick="window._closePwaBanner()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:50%;width:28px;height:28px;color:#aab;font-size:0.9rem;cursor:pointer;flex-shrink:0;padding:0">✕</button>
   </div>
-  <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-    <button id="pwa-install-btn" style="background:#00c896;color:#0f1923;border:none;border-radius:10px;padding:7px 14px;font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.78rem;cursor:pointer;white-space:nowrap">⬇ Installer</button>
-    <button onclick="document.getElementById('pwa-install-banner').style.display='none'" style="background:transparent;color:#778;border:none;font-size:0.68rem;cursor:pointer;font-family:'Montserrat',sans-serif;text-align:center">Plus tard</button>
+  <div style="display:flex;gap:10px">
+    <button onclick="window._closePwaBanner()" style="flex:1;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#aab;font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.78rem;cursor:pointer">Plus tard</button>
+    <button id="pwa-install-btn" style="flex:2;padding:10px;background:linear-gradient(135deg,#00c896,#00a87e);border:none;border-radius:12px;color:#0f1923;font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer">⬇ Installer l'application</button>
   </div>
 </div>
+
 <script>
-(function() {
-  var _pwaPrompt = null;
+(function(){
+  var _prompt = null;
+  var _dismissed = localStorage.getItem('rh_pwa_dismissed') === '1';
+
+  window._closePwaBanner = function() {
+    var b = document.getElementById('pwa-install-banner');
+    if (b) b.style.display = 'none';
+    localStorage.setItem('rh_pwa_dismissed','1');
+    _dismissed = true;
+  };
+
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
-    _pwaPrompt = e;
+    _prompt = e;
+    if (_dismissed) return;
+    var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     setTimeout(function() {
       var b = document.getElementById('pwa-install-banner');
       if (b) b.style.display = 'flex';
-    }, 2000);
+    }, isMobile ? 800 : 3000);
   });
+
   window.addEventListener('appinstalled', function() {
-    var b = document.getElementById('pwa-install-banner');
-    if (b) b.style.display = 'none';
-    _pwaPrompt = null;
+    window._closePwaBanner();
+    _prompt = null;
+    if (typeof showToast === 'function') showToast('✅ Application installée !');
   });
+
   document.addEventListener('DOMContentLoaded', function() {
     var btn = document.getElementById('pwa-install-btn');
     if (btn) btn.addEventListener('click', async function() {
-      if (!_pwaPrompt) return;
-      _pwaPrompt.prompt();
-      await _pwaPrompt.userChoice;
-      _pwaPrompt = null;
-      var b = document.getElementById('pwa-install-banner');
-      if (b) b.style.display = 'none';
+      if (!_prompt) return;
+      _prompt.prompt();
+      var r = await _prompt.userChoice;
+      _prompt = null;
+      if (r.outcome === 'accepted') window._closePwaBanner();
     });
   });
+
   if ('serviceWorker' in navigator) {
-    var swCode = [
-      "const CACHE='rh-v1';",
+    var sw = [
+      "const C='rh-v1';",
       "self.addEventListener('install',e=>{self.skipWaiting();});",
       "self.addEventListener('activate',e=>{e.waitUntil(clients.claim());});",
       "self.addEventListener('fetch',e=>{",
       "  if(e.request.url.includes('firestore.googleapis.com'))return;",
       "  if(e.request.url.includes('fonts.gstatic.com')||e.request.url.includes('fonts.googleapis.com')){",
-      "    e.respondWith(caches.open(CACHE).then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;}))));",
+      "    e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(s=>{c.put(e.request,s.clone());return s;}))));",
       "  }",
       "});"
     ].join('\n');
-    var blob = new Blob([swCode], {type:'application/javascript'});
-    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(){});
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
   }
 })();
 </script>
@@ -1759,13 +1622,11 @@
       <label class="form-label">Mot de passe</label>
       <div style="position:relative">
         <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password" style="padding-right:44px">
-        <button type="button" onclick="togglePassVis('loginPassword','eye-login')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0;line-height:1" title="Voir le mot de passe">
-          <span id="eye-login">👁</span>
-        </button>
+        <button type="button" onclick="togglePassVis('loginPassword','eye-login')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0;line-height:1"><span id="eye-login">👁</span></button>
       </div>
     </div>
     
-    <button class="btn btn-primary" onclick="window.doLogin && window.doLogin()" >
+    <button class="btn btn-primary" onclick="window.doLogin()" >
       <span>🔐</span> Se connecter
     </button>
     
@@ -1788,9 +1649,7 @@
       <label class="form-label">Mot de passe</label>
       <div style="position:relative">
         <input type="password" class="form-input" id="setup-password" placeholder="Choisir un mot de passe" style="padding-right:44px">
-        <button type="button" onclick="togglePassVis('setup-password','eye-setup')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0;line-height:1">
-          <span id="eye-setup">👁</span>
-        </button>
+        <button type="button" onclick="togglePassVis('setup-password','eye-setup')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0;line-height:1"><span id="eye-setup">👁</span></button>
       </div>
     </div>
     
@@ -1806,60 +1665,33 @@
 
 <!-- MAIN APP -->
 <div id="app">
-  <!-- ═══ SIDEBAR PC ═══ -->
-  <aside class="sidebar" style="display:none" id="pc-sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-title">RechargeHub TN</div>
-      <div class="sidebar-logo-sub">Gestion Grossiste · Tunisie</div>
+  <!-- PC SIDEBAR -->
+  <aside id="pc-sidebar" style="display:none">
+    <div class="sb-logo">
+      <div class="sb-logo-title">RechargeHub TN</div>
+      <div class="sb-logo-sub">Gestion Grossiste · Tunisie</div>
     </div>
-    <div class="sidebar-admin" id="sidebar-admin-block">
-      <div class="sidebar-admin-dot" id="sidebar-dot"></div>
-      <div class="sidebar-admin-info">
-        <div class="sidebar-admin-name" id="sidebar-admin-name">—</div>
-        <div class="sidebar-admin-role" id="sidebar-admin-role">—</div>
+    <div class="sb-admin">
+      <div class="sb-dot" id="sb-dot"></div>
+      <div style="flex:1;min-width:0">
+        <div class="sb-admin-name" id="sb-name">—</div>
+        <div class="sb-admin-role" id="sb-role">—</div>
       </div>
     </div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-item active" data-screen="dashboard" onclick="switchScreen('dashboard')">
-        <span class="sidebar-item-icon">📊</span>
-        <span class="sidebar-item-label">Dashboard</span>
-      </div>
-      <div class="sidebar-item" data-screen="stock" onclick="switchScreen('stock')">
-        <span class="sidebar-item-icon">📦</span>
-        <span class="sidebar-item-label">Stock</span>
-        <span class="sidebar-badge" id="sidebar-stock-badge" style="display:none">!</span>
-      </div>
-      <div class="sidebar-item" data-screen="vente" onclick="switchScreen('vente')">
-        <span class="sidebar-item-icon">🛒</span>
-        <span class="sidebar-item-label">Vente</span>
-      </div>
-      <div class="sidebar-item" data-screen="clients" onclick="switchScreen('clients')">
-        <span class="sidebar-item-icon">👥</span>
-        <span class="sidebar-item-label">Clients</span>
-      </div>
-      <div class="sidebar-item" data-screen="historique" onclick="switchScreen('historique')">
-        <span class="sidebar-item-icon">📋</span>
-        <span class="sidebar-item-label">Historique</span>
-      </div>
-      <div class="sidebar-item" data-screen="paiements" onclick="switchScreen('paiements')">
-        <span class="sidebar-item-icon">💳</span>
-        <span class="sidebar-item-label">Paiements</span>
-        <span class="sidebar-badge" id="sidebar-paiements-badge" style="display:none">!</span>
-      </div>
-      <div class="sidebar-item" data-screen="admins" id="sidebar-admins-item" onclick="switchScreen('admins')">
-        <span class="sidebar-item-icon">🔐</span>
-        <span class="sidebar-item-label">Admins</span>
-      </div>
+    <nav class="sb-nav">
+      <div class="sb-item active" data-screen="dashboard" onclick="switchScreen('dashboard')"><span class="sb-item-icon">📊</span>Dashboard</div>
+      <div class="sb-item" data-screen="stock" onclick="switchScreen('stock')"><span class="sb-item-icon">📦</span>Stock<span class="sb-badge" id="sb-stock-badge" style="display:none;margin-left:auto">!</span></div>
+      <div class="sb-item" data-screen="vente" onclick="switchScreen('vente')"><span class="sb-item-icon">🛒</span>Vente</div>
+      <div class="sb-item" data-screen="clients" onclick="switchScreen('clients')"><span class="sb-item-icon">👥</span>Clients</div>
+      <div class="sb-item" data-screen="historique" onclick="switchScreen('historique')"><span class="sb-item-icon">📋</span>Historique</div>
+      <div class="sb-item" data-screen="paiements" onclick="switchScreen('paiements')"><span class="sb-item-icon">💳</span>Paiements<span class="sb-badge" id="sb-pai-badge" style="display:none;margin-left:auto">!</span></div>
+      <div class="sb-item" data-screen="admins" id="sb-admins-item" onclick="switchScreen('admins')"><span class="sb-item-icon">🔐</span>Admins</div>
     </nav>
-    <div class="sidebar-footer">
-      <div class="sidebar-logout" onclick="doLogout()">
-        <span>🚪</span> Se déconnecter
-      </div>
+    <div class="sb-footer">
+      <div class="sb-logout" onclick="doLogout()"><span>🚪</span>Se déconnecter</div>
     </div>
   </aside>
-
-  <!-- ═══ MAIN AREA WRAPPER ═══ -->
-  <div class="main-area" id="main-area">
+  <div id="main-wrap">
   <!-- TOP BAR -->
   <div class="top-bar">
     <div class="top-bar-title" id="screenTitle">📊 Dashboard</div>
@@ -2481,7 +2313,7 @@
       <div class="nav-label">Admins</div>
     </div>
   </nav>
-  </div><!-- /main-area -->
+  </div><!-- /main-wrap -->
 </div>
 
 <!-- ============================================================ -->
@@ -2865,13 +2697,174 @@ function waitFirebase() {
 
 function getDB() { return window._db; }
 
-async function dbGet(store)              { return window._db.dbGet(store); }
-async function dbGetById(store, id)      { return window._db.dbGetById(store, id); }
-async function dbAdd(store, data)        { return window._db.dbAdd(store, data); }
-async function dbPut(store, data)        { return window._db.dbPut(store, data); }
-async function dbDelete(store, id)       { return window._db.dbDelete(store, id); }
-async function dbGetByIndex(store, f, v) { return window._db.dbGetByIndex(store, f, v); }
-async function openDB()                  { await waitFirebase(); }
+// ================================================================
+// OFFLINE-FIRST: IndexedDB cache + Firebase sync
+// ================================================================
+const _LNAME = 'rh_local_v1';
+let _ldb = null;
+const _COLS = ['admins','produits','clients','client_prices','transactions',
+  'paiements','stock_history','vendeur_stock','transferts','corbeille',
+  'initial_debts','_sync_q'];
+
+function _ldbOpen() {
+  if (_ldb) return Promise.resolve(_ldb);
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(_LNAME, 1);
+    r.onupgradeneeded = e => {
+      const d = e.target.result;
+      _COLS.forEach(c => { if (!d.objectStoreNames.contains(c)) d.createObjectStore(c, { keyPath: '_k' }); });
+    };
+    r.onsuccess = e => { _ldb = e.target.result; res(_ldb); };
+    r.onerror   = () => rej(r.error);
+  });
+}
+function _lkey(doc) {
+  return String(doc._docId || doc.session_id || doc.id || doc._k || Math.random());
+}
+async function _lcache(col, docs) {
+  try {
+    const db = await _ldbOpen();
+    await new Promise(res => {
+      const tx = db.transaction(col, 'readwrite');
+      const st = tx.objectStore(col);
+      st.clear();
+      docs.forEach(d => st.put({ ...d, _k: _lkey(d) }));
+      tx.oncomplete = res; tx.onerror = res;
+    });
+  } catch(e) {}
+}
+async function _lput(col, doc) {
+  try {
+    const db = await _ldbOpen();
+    await new Promise(res => {
+      const tx = db.transaction(col, 'readwrite');
+      tx.objectStore(col).put({ ...doc, _k: _lkey(doc) });
+      tx.oncomplete = res; tx.onerror = res;
+    });
+  } catch(e) {}
+}
+async function _ldel(col, key) {
+  try {
+    const db = await _ldbOpen();
+    await new Promise(res => {
+      const tx = db.transaction(col, 'readwrite');
+      tx.objectStore(col).delete(String(key));
+      tx.oncomplete = res; tx.onerror = res;
+    });
+  } catch(e) {}
+}
+async function _lgetall(col) {
+  try {
+    const db = await _ldbOpen();
+    return new Promise(res => {
+      const tx = db.transaction(col, 'readonly');
+      const r = tx.objectStore(col).getAll();
+      r.onsuccess = () => res((r.result||[]).map(d => { const {_k,...x}=d; return x; }));
+      r.onerror   = () => res([]);
+    });
+  } catch(e) { return []; }
+}
+
+// Online state
+let _online = navigator.onLine;
+window.addEventListener('online',  async () => {
+  _online = true;
+  _setOfflineBar(false);
+  if (typeof showToast === 'function') showToast('🟢 Connexion rétablie — synchronisation...', 'success');
+  await _syncFlush();
+  if (typeof refreshAll === 'function') refreshAll().catch(()=>{});
+});
+window.addEventListener('offline', () => {
+  _online = false;
+  _setOfflineBar(true);
+  if (typeof showToast === 'function') showToast('🔴 Hors ligne — sauvegarde locale active', 'error');
+});
+function _setOfflineBar(show) {
+  const b = document.getElementById('offline-bar');
+  if (!b) return;
+  b.style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
+  b.style.opacity   = show ? '1' : '0';
+}
+// init offline bar state
+document.addEventListener('DOMContentLoaded', () => { if (!_online) _setOfflineBar(true); });
+
+// Sync queue
+async function _qpush(op) {
+  op._k = String(Date.now() + Math.random());
+  await _lput('_sync_q', op);
+}
+async function _syncFlush() {
+  if (!_online) return;
+  const ops = await _lgetall('_sync_q');
+  if (!ops.length) return;
+  let n = 0;
+  for (const op of ops) {
+    try {
+      if (op.t === 'add')   await window._db.dbAdd(op.c, op.d);
+      if (op.t === 'put')   await window._db.dbPut(op.c, op.d);
+      if (op.t === 'del')   await window._db.dbDelete(op.c, op.id);
+      if (op.t === 'patch') await window._db.patchDocById(op.c, op.did, op.f);
+      if (op.t === 'ddoc')  await window._db.deleteByDocId(op.c, op.did);
+      await _ldel('_sync_q', op._k); n++;
+    } catch(e) { console.warn('sync retry later', op); }
+  }
+  if (n) {
+    const cnt = document.getElementById('sync-count');
+    if (cnt) { cnt.textContent = `✅ ${n} op. sync`; setTimeout(()=>cnt.textContent='',3000); }
+  }
+}
+
+// Offline-first DB wrappers
+async function dbGet(store) {
+  if (_online) {
+    try {
+      const docs = await window._db.dbGet(store);
+      _lcache(store, docs);   // async, don't await
+      return docs;
+    } catch(e) {
+      return _lgetall(store);
+    }
+  }
+  return _lgetall(store);
+}
+async function dbGetById(store, id) {
+  try { return await window._db.dbGetById(store, id); }
+  catch(e) {
+    const all = await _lgetall(store);
+    return all.find(r => String(r.id)===String(id) || String(r._docId)===String(id) || String(r.session_id)===String(id)) || null;
+  }
+}
+async function dbGetByIndex(store, f, v) {
+  if (_online) {
+    try { return await window._db.dbGetByIndex(store, f, v); }
+    catch(e) { const a = await _lgetall(store); return a.filter(r=>String(r[f])===String(v)); }
+  }
+  const a = await _lgetall(store); return a.filter(r=>String(r[f])===String(v));
+}
+async function dbAdd(store, data) {
+  _lput(store, data);
+  if (_online) {
+    try { return await window._db.dbAdd(store, data); }
+    catch(e) { await _qpush({t:'add',c:store,d:data}); return data.id; }
+  } else { await _qpush({t:'add',c:store,d:data}); return data.id; }
+}
+async function dbPut(store, data) {
+  _lput(store, data);
+  if (_online) {
+    try { return await window._db.dbPut(store, data); }
+    catch(e) { await _qpush({t:'put',c:store,d:data}); return data.id; }
+  } else { await _qpush({t:'put',c:store,d:data}); return data.id; }
+}
+async function dbDelete(store, id) {
+  const all = await _lgetall(store);
+  const found = all.find(r=>String(r.id)===String(id)||String(r.session_id)===String(id));
+  if (found) await _ldel(store, found._k || _lkey(found));
+  if (_online) {
+    try { return await window._db.dbDelete(store, id); }
+    catch(e) { await _qpush({t:'del',c:store,id}); }
+  } else { await _qpush({t:'del',c:store,id}); }
+}
+async function openDB() { await waitFirebase(); }
 // ================================================================
 const DB_NAME = 'rechargehub_tn';
 const DB_VERSION = 4;
@@ -3012,56 +3005,44 @@ async function setupFirstAdmin() {
 }
 
 
-
-// ════════════════════════════════════════════════════════
-// CONFIRMATION SÉCURISÉE PAR MOT DE PASSE ADMIN
-// ════════════════════════════════════════════════════════
-window._confirmSecureResolve = null;
-
-function confirmSecure(title, message, icon = '⚠️') {
-  return new Promise((resolve) => {
-    document.getElementById('confirm-secure-icon').textContent = icon;
-    document.getElementById('confirm-secure-title').textContent = title;
-    document.getElementById('confirm-secure-msg').textContent = message;
-    document.getElementById('confirm-secure-pass').value = '';
-    document.getElementById('confirm-secure-error').style.display = 'none';
-    document.getElementById('modal-confirm-secure').classList.add('active');
-    setTimeout(() => document.getElementById('confirm-secure-pass').focus(), 200);
-
-    window._confirmSecureResolve = (result) => {
-      document.getElementById('modal-confirm-secure').classList.remove('active');
-      window._confirmSecureResolve = null;
-      resolve(result);
-    };
-  });
-}
-
-async function _confirmSecureCheck() {
-  const entered = document.getElementById('confirm-secure-pass').value;
-  const storedPass = currentAdmin?.password || currentAdmin?.motdepasse || currentAdmin?.pass || '';
-  if (entered !== storedPass) {
-    document.getElementById('confirm-secure-error').style.display = 'block';
-    document.getElementById('confirm-secure-pass').value = '';
-    document.getElementById('confirm-secure-pass').focus();
-    return;
-  }
-  document.getElementById('confirm-secure-error').style.display = 'none';
-  window._confirmSecureResolve && window._confirmSecureResolve(true);
-}
-window._confirmSecureCheck = _confirmSecureCheck;
-
 function togglePassVis(inputId, eyeId) {
   const inp = document.getElementById(inputId);
   const eye = document.getElementById(eyeId);
   if (!inp) return;
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    if (eye) eye.textContent = '🙈';
-  } else {
-    inp.type = 'password';
-    if (eye) eye.textContent = '👁';
-  }
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  if (eye) eye.textContent = inp.type === 'password' ? '👁' : '🙈';
 }
+
+window._csResolve = null;
+function confirmSecure(title, msg, icon='⚠️') {
+  return new Promise(resolve => {
+    document.getElementById('cs-icon').textContent = icon;
+    document.getElementById('cs-title').textContent = title;
+    document.getElementById('cs-msg').textContent = msg;
+    document.getElementById('cs-pass').value = '';
+    document.getElementById('cs-err').style.display = 'none';
+    document.getElementById('modal-confirm-secure').classList.add('active');
+    setTimeout(() => document.getElementById('cs-pass').focus(), 200);
+    window._csResolve = r => {
+      document.getElementById('modal-confirm-secure').classList.remove('active');
+      window._csResolve = null;
+      resolve(r);
+    };
+  });
+}
+async function _csCheck() {
+  const entered = document.getElementById('cs-pass').value;
+  const stored = currentAdmin?.password || currentAdmin?.motdepasse || currentAdmin?.pass || '';
+  if (entered !== stored) {
+    document.getElementById('cs-err').style.display = 'block';
+    document.getElementById('cs-pass').value = '';
+    document.getElementById('cs-pass').focus();
+    return;
+  }
+  window._csResolve && window._csResolve(true);
+}
+window._csCheck = _csCheck;
+
 async function doLogin() {
   const docId = document.getElementById('loginAdmin').value;
   const pass  = document.getElementById('loginPassword').value;
@@ -3072,7 +3053,7 @@ async function doLogin() {
     // Get admin by _docId using dbGetByIndex on stored list
     // (we stored _docId as option value in initLogin)
     const admins = await dbGet('admins');
-    const admin = admins.find(a => a._docId === docId);
+    const admin = admins.find(a => a._docId === docId || String(a.id) === String(docId));
     if (!admin) { showToast('Admin introuvable', 'error'); return; }
 
     // Accept any common password field name
@@ -3089,18 +3070,8 @@ async function doLogin() {
     }
 
     currentAdmin = admin;
-    const roleColors = { 'Gérant': 'var(--accent)', 'Vendeur': 'var(--accent2)', 'Assistant': 'var(--warning)' };
     document.getElementById('currentAdminName').textContent = admin.nom || admin.name;
-    // Sync sidebar admin info
-    const sbName = document.getElementById('sidebar-admin-name');
-    const sbRole = document.getElementById('sidebar-admin-role');
-    const sbDot  = document.getElementById('sidebar-dot');
-    if (sbName) sbName.textContent = admin.nom || admin.name || '—';
-    if (sbRole) sbRole.textContent = admin.role || 'Gérant';
-    if (sbDot)  sbDot.style.background = roleColors[admin.role] || 'var(--accent)';
-    // Hide admins sidebar item for non-gérant
-    const sbAdmins = document.getElementById('sidebar-admins-item');
-    if (sbAdmins) sbAdmins.style.display = (admin.role === 'Gérant') ? 'flex' : 'none';
+    const roleColors = { Gérant: 'var(--accent)', Vendeur: 'var(--accent2)', Assistant: 'var(--warning)' };
     const dot = document.querySelector('.admin-dot');
     if (dot) dot.style.background = roleColors[admin.role] || 'var(--accent)';
     let roleBadge = document.getElementById('admin-role-badge');
@@ -3139,11 +3110,7 @@ function applyStoredTheme() {
 }
 
 async function resetApplication() {
-  const ok = await confirmSecure(
-    '🔴 Réinitialisation totale',
-    'Cette action va supprimer TOUTES les données : admins, stock, clients, historique. L\'application repartira de zéro. Cette action est IRRÉVERSIBLE.',
-    '☢️'
-  );
+  const ok = await confirmSecure('☢️ Réinitialisation totale', 'TOUTES les données seront supprimées : admins, stock, clients, historique. Action IRRÉVERSIBLE.','☢️');
   if (!ok) return;
 
   showToast('⏳ Réinitialisation en cours...', 'info');
@@ -3210,23 +3177,12 @@ const screenTitles = {
 };
 
 async function switchScreen(name) {
-  // Sync sidebar items
-  document.querySelectorAll('.sidebar-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.screen === name);
-  });
-  // Sync sidebar badges with bottom-nav badges
-  const stockBadge = document.getElementById('stock-alert-badge');
-  const sbStockBadge = document.getElementById('sidebar-stock-badge');
-  if (stockBadge && sbStockBadge) {
-    sbStockBadge.style.display = stockBadge.style.display;
-    sbStockBadge.textContent = stockBadge.textContent;
-  }
-  const paiBadge = document.getElementById('paiements-alert-badge');
-  const sbPaiBadge = document.getElementById('sidebar-paiements-badge');
-  if (paiBadge && sbPaiBadge) {
-    sbPaiBadge.style.display = paiBadge.style.display;
-    sbPaiBadge.textContent = paiBadge.textContent;
-  }
+  // Sync sidebar
+  document.querySelectorAll('.sb-item').forEach(el => el.classList.toggle('active', el.dataset.screen === name));
+  const sb = document.getElementById('sb-stock-badge'), nb = document.getElementById('stock-alert-badge');
+  if (sb && nb) { sb.style.display = nb.style.display; sb.textContent = nb.textContent; }
+  const sp = document.getElementById('sb-pai-badge'), np = document.getElementById('paiements-alert-badge');
+  if (sp && np) { sp.style.display = np.style.display; sp.textContent = np.textContent; }
 
   // Vendeur cannot access admins screen
   if (name === 'admins' && currentAdmin && currentAdmin.client_id) {
@@ -3892,7 +3848,7 @@ async function saveStock() {
 }
 
 async function deleteStock(id) {
-  const ok = await confirmSecure('🗑 Supprimer ce produit', 'Ce produit sera supprimé du stock définitivement.', '🗑');
+  const ok = await confirmSecure('🗑 Supprimer produit','Ce produit sera supprimé du stock définitivement.','🗑');
   if (!ok) return;
   await dbDelete('produits', id);
   showToast('🗑 Produit supprimé');
@@ -3964,6 +3920,45 @@ async function renderClients() {
   }).join('');
 }
 
+
+async function openEditAdmin(id) {
+  const admins = await dbGet('admins');
+  const a = admins.find(x => String(x.id) === String(id) || String(x._docId) === String(id));
+  if (!a) return;
+  document.getElementById('edit-admin-id').value = a._docId || a.id;
+  document.getElementById('edit-admin-nom').value = a.nom || a.name || '';
+  document.getElementById('edit-admin-pass').value = '';
+  document.getElementById('edit-admin-pass2').value = '';
+  openModal('modal-editAdmin');
+}
+
+async function saveEditAdmin() {
+  const docId = document.getElementById('edit-admin-id').value;
+  const nom   = document.getElementById('edit-admin-nom').value.trim();
+  const pass1 = document.getElementById('edit-admin-pass').value;
+  const pass2 = document.getElementById('edit-admin-pass2').value;
+  if (!nom) { showToast('Le nom est requis', 'error'); return; }
+  if (pass1 && pass1 !== pass2) { showToast('❌ Les mots de passe ne correspondent pas', 'error'); return; }
+  // Require current admin password to confirm change
+  const ok = await confirmSecure('✏️ Modifier admin', 'Confirmez la modification avec votre mot de passe.', '✏️');
+  if (!ok) return;
+  const admins = await dbGet('admins');
+  const a = admins.find(x => String(x._docId) === String(docId) || String(x.id) === String(docId));
+  if (!a) { showToast('Admin introuvable', 'error'); return; }
+  const updated = { ...a, nom };
+  if (pass1) updated.password = pass1;
+  await dbPut('admins', updated);
+  // Update currentAdmin if editing self
+  if (String(a.id) === String(currentAdmin.id) || String(a._docId) === String(currentAdmin._docId)) {
+    currentAdmin = { ...currentAdmin, nom, ...(pass1 ? { password: pass1 } : {}) };
+    document.getElementById('currentAdminName').textContent = nom;
+    const sbN = document.getElementById('sb-name'); if (sbN) sbN.textContent = nom;
+  }
+  showToast('✅ Admin mis à jour');
+  closeModal('modal-editAdmin');
+  await renderAdminsList();
+  await initLogin();
+}
 async function openClientDetail(id, silent = false) {
   const [c, produits, prices, allTx] = await Promise.all([
     dbGetById('clients', id),
@@ -4284,7 +4279,7 @@ function toggleSessionDetail(idx) {
 }
 
 async function deleteClient(id) {
-  const ok = await confirmSecure('🗑 Supprimer ce client', 'Toutes les données de ce client (historique, prix personnalisés) seront supprimées définitivement.', '🗑');
+  const ok = await confirmSecure('🗑 Supprimer client','Toutes les données de ce client seront supprimées définitivement.','🗑');
   if (!ok) return;
   await dbDelete('clients', id);
   // delete client prices
@@ -5157,7 +5152,7 @@ function switchHistTab(tab) {
 }
 
 async function supprimerSession(sessionId) {
-  const ok = await confirmSecure('🗑 Supprimer cette vente', 'La vente sera déplacée dans la corbeille. Vous pourrez la restaurer depuis la corbeille.', '🗑');
+  const ok = await confirmSecure('🗑 Supprimer vente','La vente sera déplacée en corbeille. Récupérable depuis la corbeille.','🗑');
   if (!ok) return;
 
   // Get all transactions of this session
@@ -5294,7 +5289,7 @@ async function restaurerTout() {
 }
 
 async function supprimerDefinitivement(sessionId) {
-  const ok = await confirmSecure('🔥 Suppression définitive', 'Cette vente sera supprimée définitivement. Cette action est IRRÉVERSIBLE.', '🔥');
+  const ok = await confirmSecure('🔥 Suppression définitive','Cette vente sera supprimée DÉFINITIVEMENT.','🔥');
   if (!ok) return;
   const txs = await dbGet('transactions');
   const sessionTxs = txs.filter(t => t.date_heure === sessionId);
@@ -5315,7 +5310,7 @@ async function viderCorbeilleDefinitif() {
   const txs = await dbGet('transactions');
   const deletedTxs = txs.filter(t => t._deleted === true);
   if (deletedTxs.length === 0) { showToast('La corbeille est déjà vide'); return; }
-  const ok = await confirmSecure('🔥 Vider la corbeille', `${deletedTxs.length} vente(s) seront supprimées définitivement. Cette action est IRRÉVERSIBLE.`, '🔥');
+  const ok = await confirmSecure('🔥 Vider corbeille',`${deletedTxs.length} vente(s) supprimées DÉFINITIVEMENT.`,'🔥');
   if (!ok) return;
 
   for (const tx of deletedTxs) {
@@ -5342,8 +5337,8 @@ async function updateCorbeillesBadge() {
 
 // Move a session (all its transactions) to the corbeille store
 async function supprimerSession(sessionId) {
-  const ok = await confirmSecure('🗑 Supprimer cette vente', 'La vente sera déplacée dans la corbeille. Vous pourrez la restaurer depuis la corbeille.', '🗑');
-  if (!ok) return;
+  const ok2 = await confirmSecure('🗑 Supprimer vente','La vente sera déplacée en corbeille. Récupérable depuis la corbeille.','🗑');
+  if (!ok2) return;
 
   // Get all transactions for this session
   const txs = await dbGet('transactions');
@@ -5477,8 +5472,7 @@ async function restaurerSession(corbeilleDocId) {
 }
 
 async function supprimerDefinitivement(corbeilleDocId) {
-  const ok = await confirmSecure('🔥 Suppression définitive', 'Cette vente sera supprimée définitivement. Cette action est IRRÉVERSIBLE.', '🔥');
-  if (!ok) return;
+  if (!confirm('⚠️ Supprimer définitivement cette vente ? Cette action est irréversible.')) return;
   const corbeille = await dbGet('corbeille').catch(() => []);
   const entry = corbeille.find(e =>
     String(e.id) === String(corbeilleDocId) ||
@@ -5506,7 +5500,7 @@ async function restaurerTout() {
 async function viderCorbeilleDefinitif() {
   const corbeille = await dbGet('corbeille').catch(() => []);
   if (corbeille.length === 0) { showToast('Corbeille déjà vide'); return; }
-  const ok2 = await confirmSecure('🔥 Vider la corbeille', `${corbeille.length} vente(s) seront supprimées définitivement. Cette action est IRRÉVERSIBLE.`, '🔥');
+  const ok2 = await confirmSecure('🔥 Vider corbeille',`${corbeille.length} vente(s) supprimées DÉFINITIVEMENT.`,'🔥');
   if (!ok2) return;
   for (const entry of corbeille) {
     await dbDelete('corbeille', entry.id || entry.session_id);
@@ -6040,8 +6034,7 @@ async function confirmerPaiementTransfert(sessionId) {
   }
 
   const msg = `Confirmer paiement de ${formatNum(montantVendu)} TND ?\n(${restantTotal > 0 ? restantTotal + ' cartes restent en stock chez le vendeur' : 'Tout a été vendu'})`;
-  const okPay = await confirmSecure('💳 Confirmer le paiement', msg, '💳');
-  if (!okPay) return;
+  if (!confirm(msg)) return;
 
   // Update transfert
   const newStatut = restantTotal > 0 ? 'partiellement_paye' : 'paye';
@@ -6100,7 +6093,10 @@ async function renderAdminsList() {
           <div class="admin-name">${a.nom}${a.id === currentAdmin.id ? ' <span style="font-size:0.62rem;color:var(--accent);background:rgba(99,102,241,0.12);border-radius:8px;padding:1px 6px">● Connecté</span>' : ''}</div>
           <div class="admin-role" style="color:${roleColor}">${a.role}</div>
         </div>
-        ${admins.length > 1 && a.id !== currentAdmin.id ? `<button class="btn btn-danger btn-sm" onclick="deleteAdmin(${a.id})">🗑</button>` : ''}
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-secondary btn-sm" onclick="openEditAdmin(${a.id})" title="Modifier nom/mot de passe">✏️</button>
+          ${admins.length > 1 && a.id !== currentAdmin.id ? `<button class="btn btn-danger btn-sm" onclick="deleteAdmin(${a.id})">🗑</button>` : ''}
+        </div>
       </div>
       ${linkedBadge}
     </div>`;
@@ -6184,7 +6180,7 @@ async function addAdmin() {
 }
 
 async function deleteAdmin(id) {
-  const ok = await confirmSecure('🗑 Supprimer cet admin', 'Ce compte administrateur sera supprimé définitivement.', '🔐');
+  const ok = await confirmSecure('🗑 Supprimer admin','Ce compte admin sera supprimé définitivement.','🔐');
   if (!ok) return;
   await dbDelete('admins', id);
   showToast('🗑 Admin supprimé');
@@ -6329,6 +6325,8 @@ function showSyncBadge() {
 })();
 
 // ── Expose functions to window so HTML onclick attributes can find them ──
+window.openEditAdmin = openEditAdmin;
+window.saveEditAdmin = saveEditAdmin;
 window.doLogin           = doLogin;
 window.setupFirstAdmin   = setupFirstAdmin;
 window.doLogout          = doLogout;
@@ -6402,7 +6400,6 @@ function _paymentBadge(sessionId, sessionTotal, map, onClickFn) {
   }
   const totalPaid = entry.forceComplete ? sessionTotal : entry.paid;
   const remaining = Math.max(0, sessionTotal - totalPaid);
-
   if (remaining <= 0 || entry.forceComplete) {
     return `<span style="background:rgba(16,185,129,0.15);color:var(--success);border:1px solid var(--success);border-radius:20px;padding:2px 8px;font-size:0.62rem;font-weight:700;white-space:nowrap">✅ Payé</span>`;
   }
@@ -7836,35 +7833,58 @@ window.imprimerListeDettes    = imprimerListeDettes;
 
 </script>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: Confirmation sécurisée par mot de passe admin
-═══════════════════════════════════════════════════════ -->
+<!-- Secure Confirm Modal -->
 <div class="modal-overlay" id="modal-confirm-secure">
-  <div class="modal" style="max-width:400px">
-    <div style="text-align:center;margin-bottom:18px">
-      <div style="font-size:2.2rem;margin-bottom:8px" id="confirm-secure-icon">⚠️</div>
-      <div style="font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:800;color:var(--danger)" id="confirm-secure-title">Confirmation requise</div>
-      <div style="font-size:0.78rem;color:var(--text3);margin-top:8px;line-height:1.5" id="confirm-secure-msg"></div>
+  <div class="modal" style="max-width:380px">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2rem;margin-bottom:6px" id="cs-icon">⚠️</div>
+      <div style="font-weight:800;font-size:0.95rem;color:var(--danger)" id="cs-title">Confirmation</div>
+      <div style="font-size:0.76rem;color:var(--text3);margin-top:8px;line-height:1.5" id="cs-msg"></div>
     </div>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px">
-      <div style="font-size:0.72rem;color:var(--danger);font-weight:700;margin-bottom:8px">🔐 Entrez votre mot de passe pour confirmer</div>
+    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-sm);padding:12px;margin-bottom:14px">
+      <div style="font-size:0.7rem;color:var(--danger);font-weight:700;margin-bottom:8px">🔐 Confirmez avec votre mot de passe</div>
       <div style="position:relative">
-        <input type="password" id="confirm-secure-pass" class="form-input" placeholder="Mot de passe admin" style="padding-right:44px;margin-bottom:0"
-          onkeydown="if(event.key==='Enter') window._confirmSecureResolve && document.getElementById('btn-confirm-secure-ok').click()">
-        <button type="button" onclick="togglePassVis('confirm-secure-pass','eye-confirm')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0">
-          <span id="eye-confirm">👁</span>
-        </button>
+        <input type="password" id="cs-pass" class="form-input" placeholder="Mot de passe admin" style="padding-right:44px;margin:0"
+          onkeydown="if(event.key==='Enter') document.getElementById('btn-cs-ok').click()">
+        <button type="button" onclick="togglePassVis('cs-pass','cs-eye')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0"><span id="cs-eye">👁</span></button>
       </div>
-      <div id="confirm-secure-error" style="color:var(--danger);font-size:0.7rem;margin-top:6px;display:none">❌ Mot de passe incorrect</div>
+      <div id="cs-err" style="color:var(--danger);font-size:0.7rem;margin-top:6px;display:none">❌ Mot de passe incorrect</div>
     </div>
     <div style="display:flex;gap:10px">
-      <button class="btn btn-secondary" style="flex:1" onclick="window._confirmSecureResolve && window._confirmSecureResolve(false)">Annuler</button>
-      <button class="btn" id="btn-confirm-secure-ok" style="flex:1;background:var(--danger);color:#fff;font-weight:700" onclick="_confirmSecureCheck()">
-        Confirmer
-      </button>
+      <button class="btn btn-secondary" style="flex:1" onclick="window._csResolve&&window._csResolve(false)">Annuler</button>
+      <button id="btn-cs-ok" class="btn" style="flex:1;background:var(--danger);color:#fff;font-weight:700" onclick="_csCheck()">Confirmer</button>
     </div>
   </div>
 </div>
 
+<!-- Modal: Edit Admin -->
+<div class="modal-overlay" id="modal-editAdmin">
+  <div class="modal" style="max-width:400px">
+    <div style="font-weight:800;font-size:1rem;margin-bottom:18px">✏️ Modifier l'administrateur</div>
+    <input type="hidden" id="edit-admin-id">
+    <div class="form-group">
+      <label class="form-label">Nom</label>
+      <input type="text" class="form-input" id="edit-admin-nom" placeholder="Nom complet">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nouveau mot de passe <span style="color:var(--text3);font-size:0.7rem">(laisser vide = inchangé)</span></label>
+      <div style="position:relative">
+        <input type="password" class="form-input" id="edit-admin-pass" placeholder="Nouveau mot de passe" style="padding-right:44px">
+        <button type="button" onclick="togglePassVis('edit-admin-pass','eye-edit-admin')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0"><span id="eye-edit-admin">👁</span></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirmer nouveau mot de passe</label>
+      <div style="position:relative">
+        <input type="password" class="form-input" id="edit-admin-pass2" placeholder="Répéter le mot de passe" style="padding-right:44px">
+        <button type="button" onclick="togglePassVis('edit-admin-pass2','eye-edit-admin2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);padding:0"><span id="eye-edit-admin2">👁</span></button>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-editAdmin')">Annuler</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveEditAdmin()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
