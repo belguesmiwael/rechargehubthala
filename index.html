@@ -1515,7 +1515,7 @@
   }
 
 </style>
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22RechargeHub TN%22,%22short_name%22:%22RechargeHub%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%230f1923%22,%22theme_color%22:%22%2300c896%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230f1923'/%3E%3Ccircle cx='256' cy='210' r='90' fill='none' stroke='%2300c896' stroke-width='28'/%3E%3Ccircle cx='256' cy='210' r='28' fill='%2300c896'/%3E%3C/svg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any maskable%22}]}">
+<link rel="manifest" id="pwa-manifest-link">
 </head>
 <body>
 <!-- Offline status bar -->
@@ -1528,24 +1528,63 @@
 
 <!-- PWA Install Banner -->
 <div id="pwa-install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:linear-gradient(135deg,#0d1f2d,#0f2a1e);border-top:2px solid #00c896;padding:16px 20px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,200,150,0.25);flex-direction:column;gap:12px;animation:slideUpBanner 0.4s cubic-bezier(0.4,0,0.2,1)">
+  <!-- Header -->
   <div style="display:flex;align-items:center;gap:14px">
     <div style="width:48px;height:48px;background:linear-gradient(135deg,#00c896,#0066cc);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.5rem">📲</div>
     <div style="flex:1">
       <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.92rem;color:#fff">Installer RechargeHub TN</div>
-      <div style="font-size:0.7rem;color:#8ab;margin-top:2px">Disponible hors connexion · Accès rapide</div>
+      <div style="font-size:0.7rem;color:#8ab;margin-top:2px">Disponible hors connexion · Accès rapide depuis l'écran d'accueil</div>
     </div>
-    <button onclick="window._closePwaBanner()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:50%;width:28px;height:28px;color:#aab;font-size:0.9rem;cursor:pointer;flex-shrink:0;padding:0">✕</button>
+    <button onclick="window._closePwaBanner()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:50%;width:30px;height:30px;color:#aab;font-size:1rem;cursor:pointer;flex-shrink:0;padding:0;line-height:1">✕</button>
   </div>
-  <div style="display:flex;gap:10px">
-    <button onclick="window._closePwaBanner()" style="flex:1;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#aab;font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.78rem;cursor:pointer">Plus tard</button>
-    <button id="pwa-install-btn" style="flex:2;padding:10px;background:linear-gradient(135deg,#00c896,#00a87e);border:none;border-radius:12px;color:#0f1923;font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer">⬇ Installer l'application</button>
+  <!-- Android: install button -->
+  <div id="pwa-btn-android" style="display:flex;gap:10px">
+    <button onclick="window._closePwaBanner()" style="flex:1;padding:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#aab;font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.78rem;cursor:pointer">Plus tard</button>
+    <button id="pwa-install-btn" style="flex:2;padding:11px;background:linear-gradient(135deg,#00c896,#00a87e);border:none;border-radius:12px;color:#0f1923;font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,200,150,0.4)">⬇ Installer l'application</button>
+  </div>
+  <!-- iOS: manual guide -->
+  <div id="pwa-ios-guide" style="display:none;flex-direction:column;gap:10px">
+    <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:12px;font-size:0.75rem;color:#cde;line-height:1.7">
+      <div style="font-weight:700;color:#fff;margin-bottom:6px">📱 Installer sur iPhone / iPad :</div>
+      <div>1. Appuyez sur <strong style="color:#00c896">⎋ Partager</strong> (bouton en bas de Safari)</div>
+      <div>2. Faites défiler et appuyez sur <strong style="color:#00c896">« Sur l'écran d'accueil »</strong></div>
+      <div>3. Appuyez sur <strong style="color:#00c896">Ajouter</strong></div>
+    </div>
+    <button onclick="window._closePwaBanner()" style="padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#aab;font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.78rem;cursor:pointer">J'ai compris</button>
   </div>
 </div>
 
 <script>
 (function(){
-  var _prompt = null;
+  // ── Generate manifest as Blob URL (works on Android Chrome) ──
+  var iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="80" fill="#0f1923"/><circle cx="256" cy="200" r="100" fill="none" stroke="#00c896" stroke-width="32"/><circle cx="256" cy="200" r="36" fill="#00c896"/><rect x="140" y="340" width="232" height="40" rx="20" fill="#00c896" opacity="0.5"/><rect x="180" y="395" width="152" height="30" rx="15" fill="#00c896" opacity="0.35"/></svg>';
+  var iconUrl = URL.createObjectURL(new Blob([iconSvg], {type:'image/svg+xml'}));
+  var manifest = {
+    name: 'RechargeHub TN',
+    short_name: 'RechargeHub',
+    description: 'Gestion grossiste recharge Tunisie',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#0f1923',
+    theme_color: '#00c896',
+    orientation: 'portrait',
+    icons: [
+      { src: iconUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+      { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+    ]
+  };
+  var mBlob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+  var mUrl  = URL.createObjectURL(mBlob);
+  var mLink = document.getElementById('pwa-manifest-link');
+  if (mLink) mLink.href = mUrl;
+
+  // ── State ────────────────────────────────────────────────
+  var _prompt    = null;
   var _dismissed = localStorage.getItem('rh_pwa_dismissed') === '1';
+  var _isIOS     = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var _isAndroid = /Android/i.test(navigator.userAgent);
+  var _isMobile  = _isIOS || _isAndroid;
+  var _isInApp   = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
 
   window._closePwaBanner = function() {
     var b = document.getElementById('pwa-install-banner');
@@ -1554,16 +1593,41 @@
     _dismissed = true;
   };
 
+  function _showBanner(mode) {
+    if (_dismissed || _isInApp) return;
+    var b = document.getElementById('pwa-install-banner');
+    var btnWrap  = document.getElementById('pwa-btn-android');
+    var iosGuide = document.getElementById('pwa-ios-guide');
+    if (!b) return;
+    if (mode === 'ios') {
+      if (btnWrap)  btnWrap.style.display  = 'none';
+      if (iosGuide) iosGuide.style.display = 'flex';
+    } else {
+      if (btnWrap)  btnWrap.style.display  = 'flex';
+      if (iosGuide) iosGuide.style.display = 'none';
+    }
+    b.style.display = 'flex';
+  }
+
+  // Android: wait for beforeinstallprompt
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     _prompt = e;
-    if (_dismissed) return;
-    var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    setTimeout(function() { _showBanner('android'); }, _isMobile ? 800 : 2500);
+  });
+
+  // iOS: show manual guide (no beforeinstallprompt on Safari)
+  if (_isIOS && !_isInApp) {
+    setTimeout(function() { _showBanner('ios'); }, 1500);
+  }
+
+  // Fallback: if after 5s on Android no prompt fired, show anyway with generic msg
+  if (_isAndroid && !_isInApp) {
     setTimeout(function() {
       var b = document.getElementById('pwa-install-banner');
-      if (b) b.style.display = 'flex';
-    }, isMobile ? 800 : 3000);
-  });
+      if (b && b.style.display === 'none' && !_dismissed) _showBanner('android');
+    }, 5000);
+  }
 
   window.addEventListener('appinstalled', function() {
     window._closePwaBanner();
@@ -1574,27 +1638,32 @@
   document.addEventListener('DOMContentLoaded', function() {
     var btn = document.getElementById('pwa-install-btn');
     if (btn) btn.addEventListener('click', async function() {
-      if (!_prompt) return;
-      _prompt.prompt();
-      var r = await _prompt.userChoice;
-      _prompt = null;
-      if (r.outcome === 'accepted') window._closePwaBanner();
+      if (_prompt) {
+        _prompt.prompt();
+        var r = await _prompt.userChoice;
+        _prompt = null;
+        if (r.outcome === 'accepted') window._closePwaBanner();
+      }
     });
   });
 
+  // ── Service Worker ────────────────────────────────────────
   if ('serviceWorker' in navigator) {
     var sw = [
-      "const C='rh-v1';",
+      "const C='rh-v2';",
       "self.addEventListener('install',e=>{self.skipWaiting();});",
       "self.addEventListener('activate',e=>{e.waitUntil(clients.claim());});",
       "self.addEventListener('fetch',e=>{",
+      "  if(e.request.method!=='GET')return;",
       "  if(e.request.url.includes('firestore.googleapis.com'))return;",
       "  if(e.request.url.includes('fonts.gstatic.com')||e.request.url.includes('fonts.googleapis.com')){",
       "    e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(s=>{c.put(e.request,s.clone());return s;}))));",
       "  }",
       "});"
     ].join('\n');
-    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
+    navigator.serviceWorker.register(
+      URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))
+    ).catch(function(){});
   }
 })();
 </script>
